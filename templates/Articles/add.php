@@ -1,6 +1,7 @@
 <!-- File: templates/Articles/add.php -->
 
 <h1>記事の追加</h1>
+
 <?php
     echo $this->Form->create($article);
     // 今はユーザーを直接記述
