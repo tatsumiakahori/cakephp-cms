@@ -41,4 +41,34 @@ class ArticlesController extends AppController
         }
         $this->set('article', $article);
     }
+
+    public function edit($slug = null)
+    {
+        $article = $this->Articles->findBySlug($slug)->firstOrFail();
+
+        // PATCH, POST, または PUT リクエストの場合にのみデータを更新
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $article = $this->Articles->patchEntity($article, $this->request->getData());
+            if ($this->Articles->save($article)) {
+                $this->Flash->success(__('Your article has been updated.'));
+                return $this->redirect(['action' => 'view', $article->slug]);
+            }
+            $this->Flash->error(__('Unable to update your article.'));
+        }
+
+        $this->set(compact('article'));
+    }
+
+    public function delete($slug)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $article = $this->Articles->findBySlug($slug)->firstOrFail();
+        if ($this->Articles->delete($article)) {
+            $this->Flash->success(__('The article with id: {0} has been deleted.', h($article->id)));
+        } else {
+            $this->Flash->error(__('The article with id: {0} could not be deleted.', h($article->id)));
+        }
+        return $this->redirect(['action' => 'index']);
+    }
 }
