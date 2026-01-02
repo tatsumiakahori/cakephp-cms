@@ -19,7 +19,10 @@ class ArticlesController extends AppController
 
     public function view($slug = null)
     {
-        $article = $this->Articles->findBySlug($slug)->firstOrFail();
+        $article = $this->Articles
+            ->findBySlug($slug)
+            ->contain('Tags')
+            ->firstOrFail();
         $this->set(compact('article'));
     }
 
@@ -39,12 +42,20 @@ class ArticlesController extends AppController
             }
             $this->Flash->error(__('Unable to add your article.'));
         }
+
+        // タグのリストを取得してセット
+        $tags = $this->Articles->Tags->find('list')->all();
+        $this->set('tags', $tags);
+
         $this->set('article', $article);
     }
 
     public function edit($slug = null)
     {
-        $article = $this->Articles->findBySlug($slug)->firstOrFail();
+        $article = $this->Articles
+            ->findBySlug($slug)
+            ->contain('Tags') // 関連するタグも取得
+            ->firstOrFail();
 
         // PATCH, POST, または PUT リクエストの場合にのみデータを更新
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -56,6 +67,8 @@ class ArticlesController extends AppController
             $this->Flash->error(__('Unable to update your article.'));
         }
 
+        $tags = $this->Articles->Tags->find('list')->all();
+        $this->set(compact('tags'));
         $this->set(compact('article'));
     }
 
@@ -70,5 +83,20 @@ class ArticlesController extends AppController
             $this->Flash->error(__('The article with id: {0} could not be deleted.', h($article->id)));
         }
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function tags(...$tags)
+    {
+        // ArticlesTable を使用してタグ付きの記事を検索します。
+        $articles = $this->Articles->find('tagged', [
+            'tags' => $tags
+        ])
+        ->all();
+
+        // 変数をビューテンプレートのコンテキストに渡します。
+        $this->set([
+            'articles' => $articles,
+            'tags' => $tags
+        ]);
     }
 }
