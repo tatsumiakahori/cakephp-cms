@@ -127,12 +127,18 @@ th {
 .top-nav-title span {
     color: var(--color-cakephp-gray);
 }
-.top-nav-links a {
+.top-nav-links a,
+.top-nav-account p {
     margin: 0 0.5rem;
 }
 .top-nav-title a,
 .top-nav-links a {
     font-weight: bold;
+}
+.top-nav-account {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
 }
 .side-nav-item {
     display: block;

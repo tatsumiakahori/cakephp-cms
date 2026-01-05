@@ -38,9 +38,15 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <div class="top-nav-title">
             <a href="<?= $this->Url->build('/') ?>"><span>Cake</span>PHP</a>
         </div>
-        <div class="top-nav-links">
-            <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/">Documentation</a>
-            <a target="_blank" rel="noopener" href="https://api.cakephp.org/">API</a>
+        <div class="top-nav-account">
+            <?php $identity = $this->request->getAttribute('identity'); ?>
+            <?php if ($identity): ?>
+                <p>ようこそ、<?= h($identity->get('email')) ?> さん</p>
+                <?= $this->Html->link('ログアウト', ['controller' => 'Users', 'action' => 'logout']) ?>
+            <?php else: ?>
+                <p>ようこそ、ゲストさん</p>
+                <?= $this->Html->link('ログイン', ['controller' => 'Users', 'action' => 'login']) ?>
+            <?php endif; ?>
         </div>
     </nav>
     <main class="main">
