@@ -13,7 +13,8 @@ class ArticlesController extends AppController
 
     public function index()
     {
-        $articles = $this->paginate($this->Articles);
+        $query = $this->Articles->find()->contain(['Tags']);
+        $articles = $this->paginate($query);
         $this->set(compact('articles'));
     }
 

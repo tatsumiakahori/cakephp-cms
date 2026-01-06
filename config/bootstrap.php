@@ -45,6 +45,9 @@ use Cake\Mailer\TransportFactory;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
 use function Cake\Core\env;
+use Cake\I18n\DateTime;
+
+DateTime::setToStringFormat('yyyy/MM/dd H:mm:ss');
 
 /*
  * Load global functions for collections, translations, debugging etc.

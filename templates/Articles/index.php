@@ -4,6 +4,7 @@
 <table>
     <tr>
         <th>タイトル</th>
+        <th>タグ</th>
         <th>作成日時</th>
         <th>操作</th>
     </tr>
@@ -13,7 +14,10 @@
             <?= $this->Html->link($article->title, ['action' => 'view', $article->slug]) ?>
         </td>
         <td>
-            <?= $article->created->format(DATE_RFC850) ?>
+            <?= h($article->tag_string) ?>
+        </td>
+        <td>
+            <?= h($article->created) ?>
         </td>
         <td>
             <?= $this->Html->link('編集', ['action' => 'edit', $article->slug]) ?>
